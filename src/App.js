@@ -1,5 +1,7 @@
-//frontend/src/App.js
+// frontend/src/App.js
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 
 import DashboardPage from "./dashboard/pages/DashboardPage";
 import HomePage from "./public/pages/HomePage";
@@ -11,29 +13,21 @@ import OrderConfirmationPage from "./public/pages/OrderConfirmationPage";
 import Login from "./pages/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import SubscriptionPage from "./dashboard/pages/SubscriptionPage";
-import { useEffect } from "react";
+
 import { connectSocket } from "./services/socket";
 
 function App() {
+  // SOCKET CONNECTION
   useEffect(() => {
     const tenantId = localStorage.getItem("tenantId") || 1;
-
     connectSocket(tenantId);
   }, []);
 
   return (
-    <div>
-      {/* routes */}
-    </div>
-  );
-}
-
-function App() {
-  return (
     <BrowserRouter>
       <Routes>
 
-        {/* PUBLIC */}
+        {/* PUBLIC ROUTES */}
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/services" element={<ServicesPage />} />
@@ -42,7 +36,7 @@ function App() {
         <Route path="/order-confirmation/:id" element={<OrderConfirmationPage />} />
         <Route path="/login" element={<Login />} />
 
-        {/* PRIVATE */}
+        {/* PRIVATE ROUTES */}
         <Route
           path="/dashboard"
           element={
@@ -66,4 +60,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;
