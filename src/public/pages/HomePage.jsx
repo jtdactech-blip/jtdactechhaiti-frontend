@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar";
-import logo from "../assets/logo.png"; // adapte chemen an si nesesè
+import logo from "../../assets/logo.png"; // adapte chemen an si nesesè
 
 export default function HomePage() {
   return (
