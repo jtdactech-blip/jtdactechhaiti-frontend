@@ -1,17 +1,7 @@
-//src/services/employees.js
-
-import axios from "axios";
-
-const API = "http://localhost:3000/employees";
+import API from "./api";
 
 export const createEmployee = async (data) => {
-  const token = localStorage.getItem("token");
-
-  const res = await axios.post(API, data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await API.post("/employees", data);
 
   return res.data;
 };

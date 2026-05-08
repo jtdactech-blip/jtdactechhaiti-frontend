@@ -1,30 +1,24 @@
-//frontend/src/services/socket.js
-
 import { io } from "socket.io-client";
+import { SOCKET_BASE_URL } from "./config";
 
 let socket;
 
 export const connectSocket = (tenantId) => {
-  socket = io("http://localhost:3000", {
+  socket = io(SOCKET_BASE_URL, {
     query: { tenantId },
     transports: ["websocket"],
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 2000,
   });
 
   socket.on("connect", () => {
-    console.log("✅ Socket connected:", socket.id);
+    console.log("Socket connected:", socket.id);
   });
 
   socket.on("disconnect", () => {
-    console.log("❌ Socket disconnected");
-  }); 
-
-  socket = io("http://localhost:3000", {
-  query: { tenantId },
-  transports: ["websocket"],
-  reconnection: true,
-  reconnectionAttempts: 5,
-  reconnectionDelay: 2000,
-});
+    console.log("Socket disconnected");
+  });
 
   return socket;
 };

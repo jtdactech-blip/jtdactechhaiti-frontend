@@ -1,5 +1,6 @@
 import axios from "axios";
 import { logout } from "../utils/auth";
+import { API_BASE_URL } from "./config";
 
 export const refreshToken = async () => {
   const refreshTokenValue = localStorage.getItem("refresh_token");
@@ -10,12 +11,9 @@ export const refreshToken = async () => {
   }
 
   try {
-    const res = await axios.post(
-      `${process.env.REACT_APP_API_URL || "http://localhost:3000"}/auth/refresh`,
-      {
-        refresh_token: refreshTokenValue,
-      },
-    );
+    const res = await axios.post(`${API_BASE_URL}/auth/refresh`, {
+      refresh_token: refreshTokenValue,
+    });
 
     const newToken = res.data.data.access_token;
     localStorage.setItem("token", newToken);

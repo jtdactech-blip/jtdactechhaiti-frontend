@@ -1,4 +1,4 @@
-import axios from "axios";
+import API from "../../services/api";
 
 import MainLayout from "../../layout/MainLayout";
 
@@ -6,8 +6,8 @@ export default function SubscriptionPage() {
   const handleSubscribe = async (plan) => {
     const token = localStorage.getItem("token");
 
-    const res = await axios.post(
-      "http://localhost:3000/stripe/checkout",
+    const res = await API.post(
+      "/stripe/checkout",
       { plan },
       {
         headers: { Authorization: `Bearer ${token}` },

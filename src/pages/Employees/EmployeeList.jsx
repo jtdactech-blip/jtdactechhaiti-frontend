@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import API from '../../services/api';
 
 const EmployeeList = ({ onSelect, onAdd }) => {
   const [employees, setEmployees] = useState([]);
+
   useEffect(() => {
-    axios.get('/api/employees').then(res => setEmployees(res.data));
+    API.get('/employees').then((res) => setEmployees(res.data.data));
   }, []);
+
   return (
     <div className="employee-list">
       <div className="header">
@@ -15,22 +17,22 @@ const EmployeeList = ({ onSelect, onAdd }) => {
       <table>
         <thead>
           <tr>
-            <th>Kòd</th>
+            <th>Kod</th>
             <th>Non</th>
-            <th>Wòl</th>
-            <th>Salè Debaz</th>
+            <th>Wol</th>
+            <th>Sale Debaz</th>
             <th>Aktyon</th>
           </tr>
         </thead>
         <tbody>
-          {employees.map(emp => (
+          {employees.map((emp) => (
             <tr key={emp.id}>
               <td>{emp.employeeCode}</td>
               <td>{emp.firstName} {emp.lastName}</td>
               <td>{emp.role}</td>
               <td>{emp.baseSalary} HTG</td>
               <td>
-                <button onClick={() => onSelect(emp)}>Wè</button>
+                <button onClick={() => onSelect(emp)}>We</button>
               </td>
             </tr>
           ))}
@@ -39,4 +41,5 @@ const EmployeeList = ({ onSelect, onAdd }) => {
     </div>
   );
 };
+
 export default EmployeeList;

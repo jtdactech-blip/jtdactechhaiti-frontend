@@ -1,9 +1,10 @@
 import axios from "axios";
 import { logout } from "../utils/auth";
+import { API_BASE_URL } from "./config";
 import { refreshToken } from "./tokenService";
 
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "http://localhost:3000",
+  baseURL: API_BASE_URL,
 });
 
 API.interceptors.request.use((config) => {
@@ -30,9 +31,10 @@ API.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return API(originalRequest);
       }
+
+      logout();
     }
 
-    logout();
     return Promise.reject(error);
   },
 );

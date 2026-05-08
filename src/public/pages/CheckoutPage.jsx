@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../services/api";
 
 import Navbar from "../components/Navbar";
 import {
@@ -24,8 +24,8 @@ export default function CheckoutPage() {
   useEffect(() => {
     setCart(getCart());
 
-    axios
-      .get("http://localhost:3000/payments/methods")
+    API
+      .get("/payments/methods")
       .then((res) => setMethods(res.data.data.methods || []))
       .catch((err) => console.error(err));
   }, []);
@@ -68,7 +68,7 @@ export default function CheckoutPage() {
       setBusy(true);
       setMessage("");
 
-      const orderRes = await axios.post("http://localhost:3000/orders/public", {
+      const orderRes = await API.post("/orders/public", {
         client_name: clientName,
         client_email: email || undefined,
         client_phone: phone,
@@ -84,7 +84,7 @@ export default function CheckoutPage() {
 
       const order = orderRes.data.data;
 
-      const paymentRes = await axios.post("http://localhost:3000/payments/checkout", {
+      const paymentRes = await API.post("/payments/checkout", {
         orderId: order.id,
         method: selectedMethod,
         email: email || undefined,

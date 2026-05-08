@@ -1,7 +1,7 @@
 
 import { useState } from "react";
-import axios from "axios";
 import Navbar from "../components/Navbar";
+import API from "../../services/api";
 
 const ultraCard = {
   maxWidth: 480,
@@ -78,7 +78,7 @@ export default function ContactPage() {
     }
     setSending(true);
     try {
-      await axios.post("http://localhost:3000/contact", {
+      await API.post("/contact", {
         name,
         email,
         message,

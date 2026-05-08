@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
+import API from "../../services/api";
 import { addToCart } from "../utils/cart";
 
 export default function ServicesPage() {
@@ -10,8 +10,8 @@ export default function ServicesPage() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/services")
+    API
+      .get("/services")
       .then((res) => setServices(res.data.data))
       .catch((err) => console.error(err));
   }, []);

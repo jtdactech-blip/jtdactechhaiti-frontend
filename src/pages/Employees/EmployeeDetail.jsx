@@ -1,38 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import API from '../../services/api';
 
 const EmployeeDetail = ({ employee, onBack }) => {
   const [payrolls, setPayrolls] = useState([]);
+
   useEffect(() => {
     if (employee) {
-      axios.get(`/api/payroll?employeeId=${employee.id}`).then(res => setPayrolls(res.data));
+      API.get(`/payroll?employeeId=${employee.id}`).then((res) =>
+        setPayrolls(res.data.data),
+      );
     }
   }, [employee]);
+
   if (!employee) return null;
+
   return (
     <div className="employee-detail">
-      <button onClick={onBack}>← Tounen</button>
+      <button onClick={onBack}>&larr; Tounen</button>
       <h2>Detay Anplwaye</h2>
-      <p><b>Kòd:</b> {employee.employeeCode}</p>
+      <p><b>Kod:</b> {employee.employeeCode}</p>
       <p><b>Non:</b> {employee.firstName} {employee.lastName}</p>
-      <p><b>Wòl:</b> {employee.role}</p>
-      <p><b>Salè Debaz:</b> {employee.baseSalary} HTG</p>
+      <p><b>Wol:</b> {employee.role}</p>
+      <p><b>Sale Debaz:</b> {employee.baseSalary} HTG</p>
       <h3>Payroll</h3>
       <table>
         <thead>
           <tr>
-            <th>Peryòd</th>
-            <th>Salè Brit</th>
+            <th>Peryod</th>
+            <th>Sale Brit</th>
             <th>ONA</th>
             <th>IRI</th>
             <th>OFATMA</th>
             <th>Taks</th>
-            <th>Salè Net</th>
+            <th>Sale Net</th>
             <th>Estati</th>
           </tr>
         </thead>
         <tbody>
-          {payrolls.map(p => (
+          {payrolls.map((p) => (
             <tr key={p.id}>
               <td>{p.period}</td>
               <td>{p.grossAmount}</td>
@@ -49,4 +54,5 @@ const EmployeeDetail = ({ employee, onBack }) => {
     </div>
   );
 };
+
 export default EmployeeDetail;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 
+import API from "../../services/api";
 import Navbar from "../components/Navbar";
 
 export default function OrderConfirmationPage() {
@@ -11,8 +11,8 @@ export default function OrderConfirmationPage() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/orders/public/${id}`)
+    API
+      .get(`/orders/public/${id}`)
       .then((res) => setOrder(res.data.data))
       .catch((err) => {
         console.error(err);
