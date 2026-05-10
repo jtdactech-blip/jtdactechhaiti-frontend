@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 
 import DashboardPage from "./dashboard/pages/DashboardPage";
+import ManagementPage from "./dashboard/pages/ManagementPage";
 import HomePage from "./public/pages/HomePage";
 import ProductsPage from "./public/pages/ProductsPage";
 import ServicesPage from "./public/pages/ServicesPage";
@@ -15,6 +16,7 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import SubscriptionPage from "./dashboard/pages/SubscriptionPage";
 
 import { connectSocket } from "./services/socket";
+import "./styles/site.css";
 
 function App() {
   // SOCKET CONNECTION
@@ -51,6 +53,87 @@ function App() {
           element={
             <ProtectedRoute>
               <SubscriptionPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/employees"
+          element={
+            <ProtectedRoute>
+              <ManagementPage pageKey="employees" />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/clients"
+          element={
+            <ProtectedRoute>
+              <ManagementPage pageKey="clients" />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/backoffice/products"
+          element={
+            <ProtectedRoute>
+              <ManagementPage pageKey="products" />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/backoffice/services"
+          element={
+            <ProtectedRoute>
+              <ManagementPage pageKey="services" />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <ManagementPage pageKey="orders" />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/proformas"
+          element={
+            <ProtectedRoute>
+              <ManagementPage pageKey="proformas" />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/invoices"
+          element={
+            <ProtectedRoute>
+              <ManagementPage pageKey="invoices" />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/finance"
+          element={
+            <ProtectedRoute>
+              <ManagementPage pageKey="finance" />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute>
+              <ManagementPage pageKey="reports" />
             </ProtectedRoute>
           }
         />

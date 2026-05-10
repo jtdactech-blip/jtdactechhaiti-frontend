@@ -1,26 +1,43 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+
+import logo from "../../assets/logo.png";
+
+const links = [
+  { to: "/", label: "Accueil" },
+  { to: "/products", label: "Produits" },
+  { to: "/services", label: "Services" },
+  { to: "/contact", label: "Contact" },
+  { to: "/checkout", label: "Paiement" },
+];
 
 export default function Navbar() {
-  return (
-    <div style={{
-      display: "flex",
-      justifyContent: "space-between",
-      padding: 20,
-      background: "#111827",
-      color: "white"
-    }}>
-      <h2>JT.Dactech</h2>
+  const location = useLocation();
 
-      <div style={{ display: "flex", gap: 20 }}>
-        <Link to="/" style={link}>Home</Link>
-        <Link to="/products" style={link}>Products</Link>
-        <Link to="/services" style={link}>Services</Link>
-        <Link to="/checkout" style={link}>Checkout</Link>
-        <Link to="/contact" style={link}>Contact</Link>
-        <Link to="/login" style={link}>Login</Link>
-      </div>
-    </div>
+  return (
+    <header className="public-nav">
+      <Link to="/" className="brand-lockup">
+        <img src={logo} alt="JT.DACTECH logo" />
+        <div className="brand-copy">
+          <p className="brand-title">JT.DACTECH</p>
+          <p className="brand-subtitle">Solutions IT, reseaux, cameras et services pro</p>
+        </div>
+      </Link>
+
+      <nav className="nav-links">
+        {links.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            className={`nav-link${location.pathname === item.to ? " is-active" : ""}`}
+          >
+            {item.label}
+          </Link>
+        ))}
+
+        <Link to="/dashboard" className="nav-link nav-cta">
+          Demander un devis
+        </Link>
+      </nav>
+    </header>
   );
 }
-
-const link = { color: "white", textDecoration: "none" };

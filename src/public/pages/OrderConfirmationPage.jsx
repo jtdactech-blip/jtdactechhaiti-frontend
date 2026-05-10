@@ -13,92 +13,68 @@ export default function OrderConfirmationPage() {
   useEffect(() => {
     API
       .get(`/orders/public/${id}`)
-      .then((res) => setOrder(res.data.data))
-      .catch((err) => {
-        console.error(err);
-        setMessage("Nou pa rive jwenn detay commande a.");
-      });
+      .then((res) => setOrder(res.data?.data))
+      .catch(() => setMessage("Nou pa rive jwenn detay commande a."));
   }, [id]);
 
   const paymentMethod = searchParams.get("payment") || "payment";
 
   return (
-    <>
-      <Navbar />
+    <div className="public-shell">
+      <div className="public-frame">
+        <Navbar />
 
-      <div style={{ padding: 40, display: "grid", gap: 24 }}>
-        <section style={cardStyle}>
-          <p style={{ margin: 0, color: "#0f766e", fontWeight: 700 }}>
-            CONFIRMATION
-          </p>
-          <h1 style={{ margin: "6px 0" }}>Commande ou an anrejistre</h1>
-          <p style={{ margin: 0, color: "#475569" }}>
-            Metòd peman an: <strong>{paymentMethod}</strong>
-          </p>
-        </section>
+        <section className="public-section confirm-card">
+          <div className="surface-card">
+            <p className="eyebrow" style={{ background: "#dcfce7", color: "#166534" }}>CONFIRMATION</p>
+            <h1 style={{ marginBottom: 8 }}>Commande enregistree</h1>
+            <p className="surface-muted">
+              Methode de paiement: <strong>{paymentMethod}</strong>
+            </p>
+          </div>
 
-        {message ? <section style={messageStyle}>{message}</section> : null}
+          {message ? <div className="message-banner" style={{ marginTop: 16 }}>{message}</div> : null}
 
-        {order ? (
-          <section style={cardStyle}>
-            <h2 style={{ marginTop: 0 }}>Detay commande #{order.id}</h2>
-            <p><strong>Kliyan:</strong> {order.client_name}</p>
-            <p><strong>Imel:</strong> {order.client_email || "Pa presize"}</p>
-            <p><strong>Telefòn:</strong> {order.client_phone || "Pa presize"}</p>
-            <p><strong>Adrès:</strong> {order.client_address || "Pa presize"}</p>
-            <p><strong>Status:</strong> {order.status}</p>
-            <p><strong>Total:</strong> ${Number(order.total).toFixed(2)}</p>
-
-            <div style={{ display: "grid", gap: 12, marginTop: 16 }}>
-              {(order.items || []).map((item) => (
-                <div key={item.id} style={itemStyle}>
-                  <span>
-                    Atik #{item.product_id || item.service_id} x {item.quantity}
-                  </span>
-                  <strong>${Number(item.subtotal).toFixed(2)}</strong>
+          {order ? (
+            <div className="surface-card" style={{ marginTop: 18 }}>
+              <h3 style={{ marginTop: 0 }}>Details commande #{order.id}</h3>
+              <div className="summary-grid" style={{ marginTop: 18 }}>
+                <div className="summary-card">
+                  <p className="muted">Client</p>
+                  <h3>{order.client_name || order.client?.name || "Client"}</h3>
                 </div>
-              ))}
-            </div>
+                <div className="summary-card">
+                  <p className="muted">Telephone</p>
+                  <h3>{order.client_phone || order.client?.phone || "Non precise"}</h3>
+                </div>
+                <div className="summary-card">
+                  <p className="muted">Total</p>
+                  <h3>${Number(order.total || 0).toFixed(2)}</h3>
+                </div>
+              </div>
 
-            <div style={{ marginTop: 20 }}>
-              <Link to="/products" style={linkStyle}>Tounen sou pwodwi yo</Link>
+              <div style={{ display: "grid", gap: 12, marginTop: 18 }}>
+                {(order.items || []).map((item) => (
+                  <div key={item.id} className="cart-item">
+                    <div>
+                      <strong>Article #{item.product_id || item.service_id}</strong>
+                      <div className="surface-muted">Quantite: {item.quantity}</div>
+                    </div>
+                    <div>${Number(item.price || 0).toFixed(2)}</div>
+                    <div>${Number(item.subtotal || 0).toFixed(2)}</div>
+                    <span className="status-pill success">Valide</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="button-row" style={{ marginTop: 18 }}>
+                <Link to="/products" className="btn-primary">Retour produits</Link>
+                <Link to="/services" className="btn-ghost">Voir services</Link>
+              </div>
             </div>
-          </section>
-        ) : null}
+          ) : null}
+        </section>
       </div>
-    </>
+    </div>
   );
 }
-
-const cardStyle = {
-  padding: 24,
-  borderRadius: 18,
-  background: "#fff",
-  boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-};
-
-const messageStyle = {
-  padding: "12px 14px",
-  borderRadius: 12,
-  background: "#ecfeff",
-  color: "#155e75",
-  border: "1px solid #a5f3fc",
-};
-
-const itemStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  gap: 12,
-  padding: 12,
-  border: "1px solid #e5e7eb",
-  borderRadius: 12,
-};
-
-const linkStyle = {
-  display: "inline-flex",
-  padding: "10px 14px",
-  borderRadius: 10,
-  background: "#111827",
-  color: "#fff",
-  textDecoration: "none",
-};

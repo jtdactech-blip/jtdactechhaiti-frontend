@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import API from "../../services/api";
+import { useEffect, useMemo, useState } from "react";
 
+import API from "../../services/api";
 import Navbar from "../components/Navbar";
 import {
   cartTotal,
@@ -9,6 +9,12 @@ import {
   removeFromCart,
   updateCartQuantity,
 } from "../utils/cart";
+
+const paymentBrandMap = {
+  moncash: "MonCash",
+  stripe: "VISA",
+  paypal: "PayPal",
+};
 
 export default function CheckoutPage() {
   const [cart, setCart] = useState([]);
@@ -26,41 +32,31 @@ export default function CheckoutPage() {
 
     API
       .get("/payments/methods")
-      .then((res) => setMethods(res.data.data.methods || []))
-      .catch((err) => console.error(err));
+      .then((res) => setMethods(res.data?.data?.methods || res.data?.methods || []))
+      .catch(() => {
+        setMethods([
+          { code: "moncash", label: "MonCash", status: "active" },
+          { code: "stripe", label: "Carte Bancaire", status: "active" },
+          { code: "paypal", label: "PayPal", status: "active" },
+        ]);
+      });
   }, []);
 
-  const handleQuantityChange = (kind, id, quantity) => {
-    setCart(updateCartQuantity(kind, id, quantity));
-  };
-
-  const handleRemove = (kind, id) => {
-    setCart(removeFromCart(kind, id));
-  };
+  const amount = useMemo(() => cartTotal(cart).toFixed(2), [cart]);
 
   const handleSubmit = async () => {
-    if (!clientName.trim()) {
-      setMessage("Tanpri antre non kliyan an.");
-      return;
-    }
-
-    if (!phone.trim()) {
-      setMessage("Tanpri antre telefòn kliyan an.");
-      return;
-    }
-
-    if (!address.trim()) {
-      setMessage("Tanpri antre adrès kliyan an.");
+    if (!clientName.trim() || !phone.trim() || !address.trim()) {
+      setMessage("Tanpri ranpli non, telephone ak adres kliyan an.");
       return;
     }
 
     if (!cart.length) {
-      setMessage("Panier la vid. Ajoute omwen yon atik.");
+      setMessage("Panier la vid. Ajoute omwen yon atik avan ou kontinye.");
       return;
     }
 
     if ((selectedMethod === "stripe" || selectedMethod === "moncash") && !email.trim()) {
-      setMessage("Antre imel kliyan an pou kontinye ak peman sa a.");
+      setMessage("Imel kliyan an obligatwa pou metode peman sa a.");
       return;
     }
 
@@ -95,7 +91,7 @@ export default function CheckoutPage() {
       clearCart();
       setCart([]);
 
-      const redirectUrl = paymentRes.data.data.redirectUrl;
+      const redirectUrl = paymentRes.data?.data?.redirectUrl;
 
       if (redirectUrl) {
         window.location.href = redirectUrl;
@@ -112,174 +108,118 @@ export default function CheckoutPage() {
   };
 
   return (
-    <>
-      <Navbar />
+    <div className="public-shell">
+      <div className="public-frame">
+        <Navbar />
 
-      <div style={{ padding: 40, display: "grid", gap: 24 }}>
-        <div>
-          <h1>Peman ak Checkout</h1>
-          <p>Fè commande kliyan an, verifye panier la, epi chwazi metòd peman an.</p>
-        </div>
+        <section className="public-section">
+          <div className="section-heading">
+            <div>
+              <h1>Paiement Securise</h1>
+              <p>Panel peman an repanse pou li pi pre mockup la ak seleksyon vizyel metod yo.</p>
+            </div>
+          </div>
 
-        <div
-          style={{
-            display: "grid",
-            gap: 24,
-            gridTemplateColumns: "1.2fr 0.8fr",
-          }}
-        >
-          <section style={cardStyle}>
-            <h2 style={{ marginTop: 0 }}>Panier kliyan an</h2>
-
-            {cart.length ? (
-              <div style={{ display: "grid", gap: 14 }}>
-                {cart.map((item) => (
-                  <div
-                    key={`${item.kind}-${item.id}`}
-                    style={{
-                      display: "grid",
-                      gap: 12,
-                      gridTemplateColumns: "1.4fr 120px 120px 90px",
-                      alignItems: "center",
-                      border: "1px solid #e5e7eb",
-                      borderRadius: 12,
-                      padding: 14,
-                    }}
-                  >
+          <div className="checkout-grid">
+            <section className="surface-card">
+              <h3 style={{ marginTop: 0 }}>Panier client</h3>
+              <div style={{ display: "grid", gap: 14, marginTop: 18 }}>
+                {cart.length ? cart.map((item) => (
+                  <div key={`${item.kind}-${item.id}`} className="cart-item">
                     <div>
                       <strong>{item.name}</strong>
-                      <div style={{ color: "#64748b", fontSize: 14 }}>{item.kind}</div>
+                      <div className="surface-muted">{item.kind}</div>
                     </div>
                     <div>${Number(item.price).toFixed(2)}</div>
                     <input
+                      className="text-input"
                       type="number"
                       min="1"
                       value={item.quantity}
-                      onChange={(e) =>
-                        handleQuantityChange(item.kind, item.id, e.target.value)
-                      }
-                      style={inputStyle}
+                      onChange={(event) => setCart(updateCartQuantity(item.kind, item.id, event.target.value))}
                     />
-                    <button onClick={() => handleRemove(item.kind, item.id)} style={dangerStyle}>
+                    <button
+                      type="button"
+                      className="btn-danger"
+                      onClick={() => setCart(removeFromCart(item.kind, item.id))}
+                    >
                       Retire
                     </button>
                   </div>
+                )) : <p className="surface-muted">Panier la vid pou kounye a.</p>}
+              </div>
+            </section>
+
+            <section className="payment-card">
+              <h3 style={{ marginTop: 0 }}>Finaliser la commande</h3>
+              <div style={{ display: "grid", gap: 12, marginTop: 18 }}>
+                <input
+                  className="text-input"
+                  placeholder="Nom complet"
+                  value={clientName}
+                  onChange={(event) => setClientName(event.target.value)}
+                />
+                <input
+                  className="text-input"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                />
+                <input
+                  className="text-input"
+                  placeholder="Telephone"
+                  value={phone}
+                  onChange={(event) => setPhone(event.target.value)}
+                />
+                <textarea
+                  className="text-area"
+                  rows="4"
+                  placeholder="Adresse"
+                  value={address}
+                  onChange={(event) => setAddress(event.target.value)}
+                />
+              </div>
+
+              <div style={{ display: "grid", gap: 12, marginTop: 18 }}>
+                {(methods.length ? methods : [
+                  { code: "moncash", label: "MonCash" },
+                  { code: "stripe", label: "Carte Bancaire" },
+                  { code: "paypal", label: "PayPal" },
+                ]).map((method) => (
+                  <label
+                    key={method.code}
+                    className={`payment-option${selectedMethod === method.code ? " active" : ""}`}
+                  >
+                    <span>
+                      <input
+                        type="radio"
+                        name="payment-method"
+                        value={method.code}
+                        checked={selectedMethod === method.code}
+                        onChange={(event) => setSelectedMethod(event.target.value)}
+                        style={{ marginRight: 10 }}
+                      />
+                      {method.label}
+                    </span>
+                    <strong>{paymentBrandMap[method.code] || method.label}</strong>
+                  </label>
                 ))}
               </div>
-            ) : (
-              <p>Panier la vid pou kounye a.</p>
-            )}
-          </section>
 
-          <section style={cardStyle}>
-            <h2 style={{ marginTop: 0 }}>Finalize commande a</h2>
+              <div style={{ marginTop: 18, textAlign: "center" }}>
+                <p className="surface-muted">Montant a payer</p>
+                <h2 style={{ margin: 0 }}>${amount} USD</h2>
+              </div>
 
-            <label style={labelStyle}>Non kliyan an</label>
-            <input
-              value={clientName}
-              onChange={(e) => setClientName(e.target.value)}
-              style={inputStyle}
-              placeholder="Ex: Jean Pierre"
-            />
+              {message ? <div className="message-banner" style={{ marginTop: 16 }}>{message}</div> : null}
 
-            <label style={labelStyle}>Imel kliyan an</label>
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={inputStyle}
-              placeholder="Ex: client@email.com"
-            />
-
-            <label style={labelStyle}>Telefòn kliyan an</label>
-            <input
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              style={inputStyle}
-              placeholder="Ex: 50937123456"
-            />
-
-            <label style={labelStyle}>Adrès kliyan an</label>
-            <textarea
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              style={{ ...inputStyle, minHeight: 90, resize: "vertical" }}
-              placeholder="Ex: Delmas 75, Port-au-Prince"
-            />
-
-            <label style={labelStyle}>Metòd peman</label>
-            <select
-              value={selectedMethod}
-              onChange={(e) => setSelectedMethod(e.target.value)}
-              style={inputStyle}
-            >
-              {methods.map((method) => (
-                <option key={method.code} value={method.code}>
-                  {method.label} - {method.status}
-                </option>
-              ))}
-            </select>
-
-            <div style={{ marginTop: 18, fontWeight: 700 }}>
-              Total: ${cartTotal(cart).toFixed(2)}
-            </div>
-
-            {message ? <div style={messageStyle}>{message}</div> : null}
-
-            <button onClick={handleSubmit} disabled={busy} style={primaryStyle}>
-              {busy ? "Ap trete commande a..." : "Kreye commande a"}
-            </button>
-          </section>
-        </div>
+              <button type="button" className="btn-primary" style={{ marginTop: 18, width: "100%" }} disabled={busy} onClick={handleSubmit}>
+                {busy ? "Traitement en cours..." : "Proceder au paiement"}
+              </button>
+            </section>
+          </div>
+        </section>
       </div>
-    </>
+    </div>
   );
 }
-
-const cardStyle = {
-  padding: 24,
-  borderRadius: 18,
-  background: "#fff",
-  boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-  display: "grid",
-  gap: 12,
-};
-
-const labelStyle = {
-  fontWeight: 600,
-  color: "#334155",
-};
-
-const inputStyle = {
-  width: "100%",
-  padding: "10px 12px",
-  borderRadius: 10,
-  border: "1px solid #cbd5e1",
-  boxSizing: "border-box",
-};
-
-const primaryStyle = {
-  marginTop: 8,
-  border: 0,
-  padding: "12px 14px",
-  borderRadius: 10,
-  background: "#0f766e",
-  color: "#fff",
-  cursor: "pointer",
-};
-
-const dangerStyle = {
-  border: 0,
-  padding: "10px 12px",
-  borderRadius: 10,
-  background: "#fee2e2",
-  color: "#991b1b",
-  cursor: "pointer",
-};
-
-const messageStyle = {
-  padding: "12px 14px",
-  borderRadius: 12,
-  background: "#ecfeff",
-  color: "#155e75",
-  border: "1px solid #a5f3fc",
-};

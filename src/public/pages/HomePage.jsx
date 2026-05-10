@@ -1,76 +1,93 @@
+import { Link } from "react-router-dom";
+
 import Navbar from "../components/Navbar";
-import logo from "../../assets/logo.png"; // adapte chemen an si nesesè
+
+const services = [
+  {
+    icon: "</>",
+    title: "Developpement Logiciel",
+    description: "Applications web, ERP, CRM ak solisyon metye bati sou mezi.",
+  },
+  {
+    icon: "[]",
+    title: "Vente de Materiel",
+    description: "Ordinateurs, imprimantes, accessories ak materiel reseau biznis.",
+  },
+  {
+    icon: "()))",
+    title: "Cameras de Surveillance",
+    description: "Installation DVR, IP camera, monitoring ak remote access.",
+  },
+  {
+    icon: "#",
+    title: "Reseaux Informatiques",
+    description: "Cablage, Wi-Fi pro, firewall, switch ak maintenance reseau.",
+  },
+];
+
+const stats = [
+  { label: "Services actifs", value: "12+" },
+  { label: "Clients satisfaits", value: "250+" },
+  { label: "Projets livres", value: "140+" },
+  { label: "Support", value: "24/7" },
+];
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-[#050b18] to-[#0a1a33] text-white">
+    <div className="public-shell">
+      <div className="public-frame">
+        <Navbar />
 
-      <Navbar />
+        <section className="hero-grid">
+          <div className="hero-copy">
+            <span className="eyebrow">SOLUTIONS TECHNOLOGIQUES POUR HAITI</span>
+            <h1 className="hero-title">Solutions Technologiques pour un Avenir Meilleur</h1>
+            <p className="hero-text">
+              Developpement de logiciel, vente de materiel informatique, installation de
+              cameras de surveillance ak reseaux professionnels pou biznis modenn yo.
+            </p>
 
-      {/* HERO SECTION */}
-      <div className="flex flex-col items-center justify-center text-center px-6 pt-20">
+            <div className="button-row">
+              <Link to="/services" className="btn-primary">Decouvrir nos services</Link>
+              <Link to="/contact" className="btn-secondary">Nous contacter</Link>
+            </div>
 
-        <img
-          src={logo}
-          alt="JT.Dactech Logo"
-          className="w-40 md:w-52 drop-shadow-[0_0_25px_rgba(0,180,255,0.6)]"
-        />
+            <div className="stats-strip">
+              {stats.map((item) => (
+                <div key={item.label} className="stat-card">
+                  <p className="muted">{item.label}</p>
+                  <h3 style={{ marginTop: 8, fontSize: "1.8rem" }}>{item.value}</h3>
+                </div>
+              ))}
+            </div>
+          </div>
 
-        <h1 className="text-4xl md:text-6xl font-bold mt-8">
-          JT.DACTECH HAÏTI
-        </h1>
+          <div className="hero-visual" aria-hidden="true">
+            <div className="hero-panel large" />
+            <div className="hero-panel mid" />
+            <div className="hero-panel small" />
+          </div>
+        </section>
 
-        <p className="text-blue-300 mt-4 text-lg md:text-xl max-w-2xl">
-          Solutions informatiques • Réseaux • Sécurité • Développement logiciel
-        </p>
+        <section className="public-section">
+          <div className="section-heading">
+            <div>
+              <h2>Nos Services</h2>
+              <p>Seksyon an pran menm esprit icon + label ki nan mockup la.</p>
+            </div>
+          </div>
 
-        <div className="flex gap-4 mt-8">
-          <button className="px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl shadow-lg">
-            Explorer Services
-          </button>
-          <button className="px-6 py-3 border border-blue-500 rounded-xl hover:bg-blue-900">
-            Nous Contacter
-          </button>
-        </div>
+          <div className="feature-grid">
+            {services.map((service) => (
+              <article key={service.title} className="feature-card">
+                <div className="feature-icon">{service.icon}</div>
+                <h3>{service.title}</h3>
+                <p className="surface-muted">{service.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
       </div>
-
-      {/* SERVICES SECTION */}
-      <div className="grid md:grid-cols-3 gap-6 px-10 mt-20">
-
-        <div className="bg-[#0b1220] p-6 rounded-2xl border border-blue-900">
-          <h3 className="text-xl font-bold text-blue-400">💻 Développement</h3>
-          <p className="text-gray-300 mt-2">
-            Applications web, SaaS, ERP, CRM sur mesure.
-          </p>
-        </div>
-
-        <div className="bg-[#0b1220] p-6 rounded-2xl border border-blue-900">
-          <h3 className="text-xl font-bold text-blue-400">📡 Réseaux</h3>
-          <p className="text-gray-300 mt-2">
-            Installation réseaux informatiques professionnels.
-          </p>
-        </div>
-
-        <div className="bg-[#0b1220] p-6 rounded-2xl border border-blue-900">
-          <h3 className="text-xl font-bold text-blue-400">🎥 Sécurité</h3>
-          <p className="text-gray-300 mt-2">
-            Caméras de surveillance et systèmes intelligents.
-          </p>
-        </div>
-
-      </div>
-
-      {/* FOOTER CTA */}
-      <div className="text-center mt-20 pb-16">
-        <h2 className="text-2xl font-semibold">
-          Prêt pou digitalize biznis ou ?
-        </h2>
-
-        <p className="text-gray-400 mt-2">
-          JT.Dactech Haïti – Software Solutions
-        </p>
-      </div>
-
     </div>
   );
 }

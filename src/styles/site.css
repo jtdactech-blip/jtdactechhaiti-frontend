@@ -1,0 +1,258 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.backoffice-sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, #07152d, #0f274f);
+  color: white;
+  padding: 24px 18px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.dashboard-main {
+  margin-left: 260px;
+  padding: 30px;
+  width: calc(100% - 260px);
+}
+
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.brand-lockup img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+}
+
+.brand-title {
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.brand-subtitle {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-link {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  padding: 12px 14px;
+  border-radius: 12px;
+  transition: 0.3s;
+  display: flex;
+  gap: 12px;
+}
+
+.sidebar-link:hover,
+.sidebar-link.is-active {
+  background: rgba(255,255,255,0.12);
+  color: white;
+}
+
+.public-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #07152d;
+  padding: 18px 30px;
+  border-radius: 20px;
+  margin-bottom: 30px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.nav-link {
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.nav-link:hover {
+  color: #38bdf8;
+}
+
+.nav-cta {
+  background: #2563eb;
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: white;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: center;
+  background: linear-gradient(135deg, #07152d, #12366f);
+  color: white;
+  padding: 60px;
+  border-radius: 28px;
+}
+
+.hero-title {
+  font-size: 58px;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.hero-text {
+  color: rgba(255,255,255,0.8);
+  line-height: 1.8;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 22px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.btn-secondary {
+  background: white;
+  color: #07152d;
+  border-radius: 12px;
+  padding: 14px 22px;
+  text-decoration: none;
+}
+
+.public-section {
+  margin-top: 30px;
+}
+
+.surface-card,
+.kpi-card,
+.catalog-card,
+.contact-card,
+.payment-card {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(15,23,42,0.08);
+}
+
+.kpi-grid,
+.feature-grid,
+.catalog-grid,
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.admin-table th {
+  background: #0f172a;
+  color: white;
+  text-align: left;
+  padding: 16px;
+}
+
+.admin-table td {
+  padding: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.footer-shell {
+  margin-top: 50px;
+  background: #07152d;
+  color: white;
+  padding: 40px;
+  border-radius: 24px 24px 0 0;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+}
+
+.footer-bottom {
+  margin-top: 30px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 20px;
+  text-align: center;
+  opacity: 0.7;
+}
+
+.text-input,
+.select-input,
+.text-area {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+}
+
+@media (max-width: 900px) {
+  .dashboard-main {
+    margin-left: 0;
+    width: 100%;
+    padding: 18px;
+  }
+
+  .backoffice-sidebar {
+    display: none;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    padding: 30px;
+  }
+
+  .hero-title {
+    font-size: 38px;
+  }
+
+  .public-nav {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

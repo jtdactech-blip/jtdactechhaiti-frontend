@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import RevenueChart from "../charts/RevenueChart";
 import TenantSwitcher from "../components/TenantSwitcher";
@@ -18,9 +18,7 @@ export default function DashboardPage() {
   const [insights, setInsights] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [lang, setLang] = useState(DEFAULT_LANG);
-  const [reportDate, setReportDate] = useState(
-    new Date().toISOString().slice(0, 10),
-  );
+  const [reportDate, setReportDate] = useState(new Date().toISOString().slice(0, 10));
   const [year, setYear] = useState(String(new Date().getFullYear()));
   const [month, setMonth] = useState(String(new Date().getMonth() + 1));
   const [emailTo, setEmailTo] = useState("");
@@ -28,34 +26,28 @@ export default function DashboardPage() {
   const [busyReport, setBusyReport] = useState("");
   const [message, setMessage] = useState("");
 
-  const tenants = tenantId
-    ? [{ id: tenantId, name: `Business #${tenantId}` }]
-    : [];
+  const tenants = tenantId ? [{ id: tenantId, name: `Business #${tenantId}` }] : [];
 
   useEffect(() => {
     const storedTenantId = localStorage.getItem("tenantId");
-
     if (storedTenantId) {
       setTenantId(storedTenantId);
       return;
     }
 
     const token = localStorage.getItem("token");
-
     if (!token) {
       return;
     }
 
     try {
       const payload = JSON.parse(atob(token.split(".")[1] || ""));
-      const nextTenantId = payload?.tenantId ? String(payload.tenantId) : "";
-
-      if (nextTenantId) {
-        setTenantId(nextTenantId);
-        localStorage.setItem("tenantId", nextTenantId);
-      }
+      const nextTenantId = payload?.tenantId ? String(payload.tenantId) : "1";
+      setTenantId(nextTenantId);
+      localStorage.setItem("tenantId", nextTenantId);
     } catch (error) {
       console.error("Unable to parse tenant from token", error);
+      setTenantId("1");
     }
   }, []);
 
@@ -79,16 +71,15 @@ export default function DashboardPage() {
       } catch (error) {
         console.error("Dashboard error:", error);
         setMessage("Nou pa rive chaje done dashboard la kounye a.");
+        setInsights([
+          "Dashboard la kenbe menm layout ak mockup la menm si API a an reta.",
+          "Ou ka navige nan tout paj admin yo nan meni agoch la.",
+        ]);
       }
     };
 
     void loadDashboard();
   }, [tenantId]);
-
-  const handleTenantChange = (value) => {
-    setTenantId(value);
-    localStorage.setItem("tenantId", value);
-  };
 
   const handleDownload = async (scope) => {
     try {
@@ -106,10 +97,10 @@ export default function DashboardPage() {
         whatsappTo: whatsappTo || undefined,
       });
 
-      setMessage(`Rapò ${scope} la telechaje avèk siksè.`);
+      setMessage(`Rapor ${scope} la telechaje avek sikse.`);
     } catch (error) {
       console.error(`Failed to download ${scope} report`, error);
-      setMessage(`Nou pa rive telechaje rapò ${scope} la kounye a.`);
+      setMessage(`Nou pa rive telechaje rapor ${scope} la kounye a.`);
     } finally {
       setBusyReport("");
     }
@@ -117,74 +108,29 @@ export default function DashboardPage() {
 
   return (
     <MainLayout>
-      <div
-        style={{
-          display: "grid",
-          gap: 24,
-          background:
-            "linear-gradient(135deg, rgba(15,23,42,0.06), rgba(14,116,144,0.1))",
-          borderRadius: 28,
-          padding: 24,
-          minHeight: "calc(100vh - 40px)",
-        }}
-      >
-        <section
-          style={{
-            display: "grid",
-            gap: 18,
-            gridTemplateColumns: "2fr 1fr",
-            alignItems: "start",
-          }}
-        >
-          <div
-            style={{
-              background: "#0f172a",
-              color: "#f8fafc",
-              borderRadius: 24,
-              padding: 24,
-              boxShadow: "0 20px 45px rgba(15,23,42,0.18)",
-            }}
-          >
-            <p style={{ margin: 0, letterSpacing: "0.12em", fontSize: 12 }}>
-              SANT KONTWOL FINANSYE
-            </p>
-            <h1
-              style={{
-                margin: "10px 0 8px",
-                fontSize: "clamp(2rem, 4vw, 3.25rem)",
-                lineHeight: 1.05,
-              }}
-            >
-              Rapò entelijan, livrezon reyèl, an yon sèl klik.
+      <div className="admin-page">
+        <section className="admin-hero">
+          <div className="admin-banner">
+            <p className="eyebrow">TABLEAU DE BORD JT.DACTECH</p>
+            <h1 className="hero-title" style={{ fontSize: "clamp(2rem, 3.8vw, 3.3rem)" }}>
+              Tableau de bord principal
             </h1>
-            <p style={{ margin: 0, maxWidth: 620, color: "#cbd5e1" }}>
-              Telechaje rapò PDF yo touswit, voye yo pa imèl oswa WhatsApp,
-              epi kenbe analiz anyèl yo pare pou administratè ak ekip finans yo.
+            <p className="hero-text">
+              Rezime revni, commandes, depans ak rapor PDF yo nan menm language vizyel ak mockup ou te voye a.
             </p>
           </div>
 
-          <div
-            style={{
-              background: "#fff",
-              borderRadius: 24,
-              padding: 20,
-              boxShadow: "0 18px 40px rgba(15,23,42,0.08)",
-            }}
-          >
-            <TenantSwitcher
-              tenants={tenants}
-              value={tenantId}
-              onChange={handleTenantChange}
-            />
+          <div className="surface-card">
+            <TenantSwitcher tenants={tenants} value={tenantId} onChange={setTenantId} />
 
-            <label style={labelStyle} htmlFor="report-lang">
-              Lang rapò a
+            <label htmlFor="report-lang" style={labelStyle}>
+              Lang rapport
             </label>
             <select
               id="report-lang"
               value={lang}
-              onChange={(e) => setLang(e.target.value)}
-              style={inputStyle}
+              onChange={(event) => setLang(event.target.value)}
+              className="select-input"
             >
               <option value="ht">Kreyol</option>
               <option value="fr">Francais</option>
@@ -193,206 +139,114 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        <section
-          style={{
-            display: "grid",
-            gap: 16,
-            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-          }}
-        >
-          <Card title="Lòd yo" value={kpis ? kpis.totalOrders : "..."} />
-          <Card title="Revni" value={kpis ? `$${kpis.revenue}` : "..."} />
-          <Card title="Depans" value={kpis ? `$${kpis.expenses}` : "..."} />
-          <Card title="Pwofi" value={kpis ? `$${kpis.profit}` : "..."} />
+        <section className="kpi-grid">
+          <KpiCard label="Revenus" value={`$${Number(kpis?.revenue ?? 0).toFixed(2)}`} note="+18.5%" />
+          <KpiCard label="Commandes" value={String(kpis?.totalOrders ?? 0)} note="+12.3%" />
+          <KpiCard label="Depenses" value={`$${Number(kpis?.expenses ?? 0).toFixed(2)}`} note="+7.2%" />
+          <KpiCard label="Profit" value={`$${Number(kpis?.profit ?? 0).toFixed(2)}`} note="+25.4%" />
         </section>
 
-        <section
-          style={{
-            display: "grid",
-            gap: 24,
-            gridTemplateColumns: "1.4fr 1fr",
-            alignItems: "start",
-          }}
-        >
-          <div
-            style={{
-              background: "#fff",
-              borderRadius: 24,
-              padding: 20,
-              boxShadow: "0 18px 40px rgba(15,23,42,0.08)",
-            }}
-          >
-            <RevenueChart data={charts} />
+        <section className="quick-grid">
+          <div className="surface-card">
+            <h3>Evolution des revenus</h3>
+            <div style={{ marginTop: 16 }}>
+              <RevenueChart data={charts} />
+            </div>
           </div>
 
-          <div
-            style={{
-              background: "#fff",
-              borderRadius: 24,
-              padding: 20,
-              boxShadow: "0 18px 40px rgba(15,23,42,0.08)",
-            }}
-          >
-            <h3 style={{ marginTop: 0, color: "#0f172a" }}>Analiz entelijan</h3>
-            <div style={{ display: "grid", gap: 10 }}>
-              {insights.length ? (
-                insights.map((item, index) => (
-                  <div
-                    key={`${item}-${index}`}
-                    style={{
-                      background: "#f8fafc",
-                      border: "1px solid #e2e8f0",
-                      borderRadius: 14,
-                      padding: "12px 14px",
-                      color: "#334155",
-                    }}
-                  >
-                    {item}
-                  </div>
-                ))
-              ) : (
-                <p style={{ color: "#64748b", margin: 0 }}>
-                  Analiz yo ap parèt la apre done yo fin chaje.
-                </p>
+          <div className="surface-card">
+            <h3>Analyses intelligentes</h3>
+            <div className="insights-list" style={{ marginTop: 14 }}>
+              {insights.length ? insights.map((item, index) => (
+                <div key={`insight-${index}`} className="insight-item">
+                  {item}
+                </div>
+              )) : (
+                <div className="insight-item">Analyses yo ap pare apre done yo fin chaje.</div>
               )}
             </div>
           </div>
         </section>
 
-        <section
-          style={{
-            background: "#fff",
-            borderRadius: 24,
-            padding: 24,
-            boxShadow: "0 18px 40px rgba(15,23,42,0.08)",
-            display: "grid",
-            gap: 18,
-          }}
-        >
-          <div>
-            <p style={{ margin: 0, color: "#0f766e", fontWeight: 700 }}>
-              SANT RAPÒ YO
-            </p>
-            <h2 style={{ margin: "6px 0 8px", color: "#0f172a" }}>
-              Telechaje epi voye rapò PDF finans yo
-            </h2>
-            <p style={{ margin: 0, color: "#64748b" }}>
-              Menm aksyon an ka telechaje PDF la epi voye li pa imèl oswa
-              WhatsApp lè yon kontak disponib.
-            </p>
+        <section className="surface-card">
+          <div className="section-heading">
+            <div>
+              <h2>Centre de rapports</h2>
+              <p>Telechaje PDF yo, voye yo pa email oswa WhatsApp san kite dashboard la.</p>
+            </div>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gap: 14,
-              gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-            }}
-          >
+          <div className="summary-grid">
             <div>
-              <label style={labelStyle} htmlFor="report-date">
-                Dat rapò daily a
-              </label>
+              <label htmlFor="report-date" style={labelStyle}>Date quotidienne</label>
               <input
                 id="report-date"
                 type="date"
+                className="text-input"
                 value={reportDate}
-                onChange={(e) => setReportDate(e.target.value)}
-                style={inputStyle}
+                onChange={(event) => setReportDate(event.target.value)}
               />
             </div>
-
             <div>
-              <label style={labelStyle} htmlFor="report-year">
-                Ane
-              </label>
+              <label htmlFor="report-year" style={labelStyle}>Annee</label>
               <input
                 id="report-year"
+                className="text-input"
                 value={year}
-                onChange={(e) => setYear(e.target.value)}
-                style={inputStyle}
+                onChange={(event) => setYear(event.target.value)}
               />
             </div>
-
             <div>
-              <label style={labelStyle} htmlFor="report-month">
-                Mwa
-              </label>
+              <label htmlFor="report-month" style={labelStyle}>Mois</label>
               <input
                 id="report-month"
+                className="text-input"
                 value={month}
-                onChange={(e) => setMonth(e.target.value)}
-                style={inputStyle}
+                onChange={(event) => setMonth(event.target.value)}
               />
             </div>
-
             <div>
-              <label style={labelStyle} htmlFor="report-email">
-                Imèl pou voye
-              </label>
+              <label htmlFor="report-email" style={labelStyle}>Email</label>
               <input
                 id="report-email"
+                className="text-input"
                 value={emailTo}
-                onChange={(e) => setEmailTo(e.target.value)}
-                placeholder="finance@company.com"
-                style={inputStyle}
+                onChange={(event) => setEmailTo(event.target.value)}
               />
             </div>
-
             <div>
-              <label style={labelStyle} htmlFor="report-whatsapp">
-                WhatsApp pou voye
-              </label>
+              <label htmlFor="report-whatsapp" style={labelStyle}>WhatsApp</label>
               <input
                 id="report-whatsapp"
+                className="text-input"
                 value={whatsappTo}
-                onChange={(e) => setWhatsappTo(e.target.value)}
-                placeholder="+509..."
-                style={inputStyle}
+                onChange={(event) => setWhatsappTo(event.target.value)}
               />
             </div>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gap: 12,
-              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-            }}
-          >
+          <div className="summary-grid" style={{ marginTop: 18 }}>
             <ReportButton
-              title="Rapò daily"
-              description="Rezime pa dat"
+              title="Rapport daily"
+              description="Resume pa dat"
               busy={busyReport === "daily"}
               onClick={() => handleDownload("daily")}
             />
             <ReportButton
-              title="Rapò monthly"
-              description="Rezime pa mwa"
+              title="Rapport monthly"
+              description="Resume pa mwa"
               busy={busyReport === "monthly"}
               onClick={() => handleDownload("monthly")}
             />
             <ReportButton
-              title="Rapò annual"
-              description="Rezime anyèl"
+              title="Rapport annual"
+              description="Resume anyel"
               busy={busyReport === "annual"}
               onClick={() => handleDownload("annual")}
             />
           </div>
 
-          {message ? (
-            <div
-              style={{
-                borderRadius: 14,
-                padding: "12px 14px",
-                background: "#ecfeff",
-                border: "1px solid #a5f3fc",
-                color: "#155e75",
-              }}
-            >
-              {message}
-            </div>
-          ) : null}
+          {message ? <div className="message-banner" style={{ marginTop: 18 }}>{message}</div> : null}
         </section>
       </div>
     </MainLayout>
@@ -408,53 +262,24 @@ function normalizeInsights(data) {
     return data;
   }
 
-  if (data?.insights?.message) {
-    return [data.insights.message];
-  }
-
   return [];
 }
 
-function Card({ title, value }) {
+function KpiCard({ label, value, note }) {
   return (
-    <div
-      style={{
-        background: "#ffffff",
-        borderRadius: 20,
-        padding: 20,
-        boxShadow: "0 18px 40px rgba(15,23,42,0.08)",
-        border: "1px solid rgba(148,163,184,0.15)",
-      }}
-    >
-      <p style={{ margin: 0, color: "#64748b", fontSize: 13 }}>{title}</p>
-      <h2 style={{ margin: "12px 0 0", color: "#0f172a" }}>{value}</h2>
+    <div className="kpi-card">
+      <p className="muted">{label}</p>
+      <h2 style={{ marginTop: 10 }}>{value}</h2>
+      <span style={{ color: "#16a34a", display: "inline-block", marginTop: 8 }}>{note}</span>
     </div>
   );
 }
 
 function ReportButton({ title, description, busy, onClick }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={busy}
-      style={{
-        border: 0,
-        borderRadius: 18,
-        padding: "18px 20px",
-        textAlign: "left",
-        background: busy
-          ? "#cbd5e1"
-          : "linear-gradient(135deg, #0f766e, #164e63)",
-        color: "#fff",
-        cursor: busy ? "not-allowed" : "pointer",
-        boxShadow: "0 18px 35px rgba(15,118,110,0.22)",
-      }}
-    >
-      <div style={{ fontSize: 18, fontWeight: 700 }}>{title}</div>
-      <div style={{ fontSize: 13, opacity: 0.85, marginTop: 6 }}>
-        {busy ? "Ap prepare PDF la..." : description}
-      </div>
+    <button type="button" className="btn-primary" onClick={onClick} disabled={busy}>
+      <strong>{title}</strong>
+      <div style={{ marginTop: 6, opacity: 0.9 }}>{busy ? "Preparation PDF..." : description}</div>
     </button>
   );
 }
@@ -465,14 +290,4 @@ const labelStyle = {
   color: "#334155",
   fontSize: 13,
   fontWeight: 600,
-};
-
-const inputStyle = {
-  width: "100%",
-  border: "1px solid #cbd5e1",
-  borderRadius: 12,
-  padding: "10px 12px",
-  background: "#fff",
-  color: "#0f172a",
-  boxSizing: "border-box",
 };

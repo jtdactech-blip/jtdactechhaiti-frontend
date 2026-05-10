@@ -1,128 +1,135 @@
-
 import { useState } from "react";
+
 import Navbar from "../components/Navbar";
 import API from "../../services/api";
-
-const ultraCard = {
-  maxWidth: 480,
-  margin: "40px auto",
-  background: "#fff",
-  borderRadius: 24,
-  boxShadow: "0 8px 32px rgba(16,30,54,0.12)",
-  padding: 36,
-  display: "flex",
-  flexDirection: "column",
-  gap: 24,
-};
-const label = {
-  fontWeight: 600,
-  color: "#0f172a",
-  marginBottom: 6,
-};
-const input = {
-  padding: "12px 14px",
-  borderRadius: 10,
-  border: "1px solid #cbd5e1",
-  fontSize: 16,
-  outline: "none",
-  marginBottom: 12,
-};
-const textarea = {
-  ...input,
-  minHeight: 100,
-  resize: "vertical",
-};
-const button = {
-  background: "linear-gradient(90deg,#0f766e,#2563eb)",
-  color: "#fff",
-  border: 0,
-  borderRadius: 10,
-  padding: "14px 0",
-  fontWeight: 700,
-  fontSize: 18,
-  cursor: "pointer",
-  marginTop: 8,
-  boxShadow: "0 2px 8px rgba(37,99,235,0.08)",
-  transition: "background 0.2s",
-};
-const success = {
-  background: "#dcfce7",
-  color: "#166534",
-  borderRadius: 10,
-  padding: "12px 16px",
-  fontWeight: 600,
-  border: "1px solid #bbf7d0",
-};
-const error = {
-  background: "#fee2e2",
-  color: "#991b1b",
-  borderRadius: 10,
-  padding: "12px 16px",
-  fontWeight: 600,
-  border: "1px solid #fecaca",
-};
 
 export default function ContactPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
-  const [feedback, setFeedback] = useState(null);
+  const [feedback, setFeedback] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFeedback(null);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
     if (!name.trim() || !email.trim() || !message.trim()) {
-      setFeedback({ type: "error", text: "Tanpri ranpli tout chan yo." });
+      setFeedback("Tanpri ranpli tout chan obligatwa yo.");
       return;
     }
+
     setSending(true);
     try {
-      await API.post("/contact", {
-        name,
-        email,
-        message,
-      });
-      setFeedback({ type: "success", text: "Mesaj ou voye! Nou pral reponn ou byento." });
+      await API.post("/contact", { name, email, message, subject });
+      setFeedback("Mesaj ou voye. Ekip nou an ap tounen sou ou byento.");
       setName("");
       setEmail("");
+      setSubject("");
       setMessage("");
-    } catch (err) {
-      setFeedback({ type: "error", text: "Echèk: Mesaj la pa pase. Eseye ankò." });
+    } catch (error) {
+      console.error(error);
+      setFeedback("Nou pa t rive voye mesaj la kounye a. Eseye ankore.");
     } finally {
       setSending(false);
     }
   };
 
   return (
-    <>
-      <Navbar />
-      <form style={ultraCard} onSubmit={handleSubmit}>
-        <h1 style={{ textAlign: "center", margin: 0, color: "#0f766e" }}>📞 Kontakte Nou</h1>
-        <div>
-          <label style={label}>Non ou</label>
-          <input style={input} value={name} onChange={e => setName(e.target.value)} placeholder="Ex: Jean Pierre" disabled={sending} />
-        </div>
-        <div>
-          <label style={label}>Imel ou</label>
-          <input style={input} value={email} onChange={e => setEmail(e.target.value)} placeholder="Ex: client@email.com" type="email" disabled={sending} />
-        </div>
-        <div>
-          <label style={label}>Mesaj ou</label>
-          <textarea style={textarea} value={message} onChange={e => setMessage(e.target.value)} placeholder="Ekri mesaj ou la..." disabled={sending} />
-        </div>
-        {feedback && (
-          <div style={feedback.type === "success" ? success : error}>{feedback.text}</div>
-        )}
-        <button type="submit" style={button} disabled={sending}>
-          {sending ? "Ap voye..." : "Voye mesaj la"}
-        </button>
-        <div style={{ textAlign: "center", color: "#64748b", fontSize: 15, marginTop: 10 }}>
-          <div>Email: contact@jtdactech.com</div>
-          <div>Telefòn: +509 1234-5678</div>
-          <div>Adrès: Port-au-Prince, Haïti</div>
-        </div>
-      </form>
-    </>
+    <div className="public-shell">
+      <div className="public-frame">
+        <Navbar />
+
+        <section className="public-section">
+          <div className="section-heading">
+            <div>
+              <h1>Contactez-nous</h1>
+              <p>Layout la reprann fich kontak + fòm elegant ki nan mockup la.</p>
+            </div>
+          </div>
+
+          <div className="contact-grid">
+            <aside className="contact-card contact-detail">
+              <div>
+                <h3>Contactez-nous</h3>
+                <p className="surface-muted">Nou toujou la pou ba ou devis, support oswa plan pwoje.</p>
+              </div>
+
+              <div className="contact-line">
+                <strong>Adresse</strong>
+                <span className="surface-muted">Delmas 75, Port-au-Prince, Haiti</span>
+              </div>
+
+              <div className="contact-line">
+                <strong>Telephone</strong>
+                <span className="surface-muted">+509 1234 5678</span>
+              </div>
+
+              <div className="contact-line">
+                <strong>Email</strong>
+                <span className="surface-muted">info@jtdactech.com</span>
+              </div>
+
+              <div className="contact-line">
+                <strong>WhatsApp</strong>
+                <span className="surface-muted">+509 1234 5678</span>
+              </div>
+            </aside>
+
+            <form className="contact-card" onSubmit={handleSubmit}>
+              <h3 style={{ marginTop: 0 }}>Envoyez-nous un message</h3>
+              <div className="two-column-grid" style={{ marginTop: 18 }}>
+                <div>
+                  <label htmlFor="contact-name">Nom complet</label>
+                  <input
+                    id="contact-name"
+                    className="text-input"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="contact-email">Email</label>
+                  <input
+                    id="contact-email"
+                    className="text-input"
+                    type="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div style={{ marginTop: 14 }}>
+                <label htmlFor="contact-subject">Sujet</label>
+                <input
+                  id="contact-subject"
+                  className="text-input"
+                  value={subject}
+                  onChange={(event) => setSubject(event.target.value)}
+                />
+              </div>
+
+              <div style={{ marginTop: 14 }}>
+                <label htmlFor="contact-message">Votre message</label>
+                <textarea
+                  id="contact-message"
+                  className="text-area"
+                  rows="6"
+                  value={message}
+                  onChange={(event) => setMessage(event.target.value)}
+                />
+              </div>
+
+              {feedback ? <div className="message-banner" style={{ marginTop: 16 }}>{feedback}</div> : null}
+
+              <button type="submit" className="btn-primary" style={{ marginTop: 18 }} disabled={sending}>
+                {sending ? "Envoi en cours..." : "Envoyer"}
+              </button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
   );
 }

@@ -19,9 +19,18 @@ export default function SubscriptionPage() {
 
   return (
     <MainLayout>
-      <h1>Subscription Plans</h1>
+      <div className="admin-page">
+        <div className="admin-banner">
+          <p className="eyebrow">ABONNEMENT</p>
+          <h1 className="hero-title" style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)" }}>
+            Subscription Plans
+          </h1>
+          <p className="hero-text">
+            Menm pati abonnement nan resevwa menm kalite layout premium ak tout lot paj prensipal yo.
+          </p>
+        </div>
 
-      <div style={{ display: "flex", gap: 20, marginTop: 30 }}>
+        <div className="summary-grid">
         <Plan name="Free" price="$0" onClick={() => {}} />
         <Plan name="Pro" price="$29" onClick={() => handleSubscribe("pro")} />
         <Plan
@@ -29,6 +38,7 @@ export default function SubscriptionPage() {
           price="$99"
           onClick={() => handleSubscribe("enterprise")}
         />
+        </div>
       </div>
     </MainLayout>
   );
@@ -36,19 +46,11 @@ export default function SubscriptionPage() {
 
 function Plan({ name, price, onClick }) {
   return (
-    <div
-      style={{
-        padding: 20,
-        background: "#fff",
-        borderRadius: 10,
-        width: 200,
-        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-      }}
-    >
+    <div className="surface-card">
       <h2>{name}</h2>
       <h3>{price}/month</h3>
 
-      <button onClick={onClick} style={{ marginTop: 10 }}>
+      <button onClick={onClick} className="btn-primary" style={{ marginTop: 10 }}>
         Choose
       </button>
     </div>

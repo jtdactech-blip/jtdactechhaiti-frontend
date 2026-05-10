@@ -4,18 +4,9 @@ import Sidebar from "./Sidebar";
 
 export default function MainLayout({ children }) {
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      
-      {/* SIDEBAR */}
+    <div className="backoffice-shell">
       <Sidebar />
-
-      {/* MAIN CONTENT */}
-      <div style={{
-        flex: 1,
-        padding: "20px",
-        background: "#f5f6fa",
-        overflowY: "auto"
-      }}>
+      <div className="backoffice-main">
         {children}
       </div>
     </div>
