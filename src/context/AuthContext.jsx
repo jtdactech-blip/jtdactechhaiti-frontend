@@ -1,7 +1,6 @@
-//frontend/src/context/AuthContext.jsx
+import React, { createContext, useEffect, useState } from "react";
 
-import React, { createContext, useState, useEffect } from "react";
-import { getToken, logout, getUserRole } from "../services/auth";
+import { getToken, getUserRole, logout } from "../utils/auth";
 
 export const AuthContext = createContext();
 

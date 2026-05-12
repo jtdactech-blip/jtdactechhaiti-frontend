@@ -1,11 +1,19 @@
 import { io } from "socket.io-client";
+
 import { SOCKET_BASE_URL } from "./config";
 
-let socket;
+let socket = null;
 
 export const connectSocket = (tenantId) => {
+  if (socket) {
+    socket.disconnect();
+  }
+
+  const token = localStorage.getItem("token");
+
   socket = io(SOCKET_BASE_URL, {
     query: { tenantId },
+    auth: { token },
     transports: ["websocket"],
     reconnection: true,
     reconnectionAttempts: 5,
@@ -24,3 +32,10 @@ export const connectSocket = (tenantId) => {
 };
 
 export const getSocket = () => socket;
+
+export const disconnectSocket = () => {
+  if (socket) {
+    socket.disconnect();
+    socket = null;
+  }
+};
