@@ -5,33 +5,7 @@
       "destination": "/index.html"
     }
   ],
-   "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build"
-    }
-  ],
-   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
-   "staticFiles": [
-    {
-      "src": "public/**/*",
-      "dest": "/"
-    }
-  ],
-   "outputDirectory": "dist",
-   "buildCommand": "npm run build",
-   "env": {
-    "NODE_ENV": "production"
-  },
-   "cache": false,
-   "cleanUrls": true,
-   "trailingSlash": false,
-   "headers": [
+  "headers": [
     {
       "source": "/(.*)",
       "headers": [
@@ -50,11 +24,6 @@
       ]
     }
   ],
-   "functions": 
-
-  {
-    "buildCommand": "npm run build",
-    "outputDirectory": "dist"
-  }
-
+  "cleanUrls": true,
+  "trailingSlash": false
 }
