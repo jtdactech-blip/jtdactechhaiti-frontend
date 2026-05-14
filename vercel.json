@@ -4,5 +4,57 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ]
+  ],
+   "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build"
+    }
+  ],
+   "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+   "staticFiles": [
+    {
+      "src": "public/**/*",
+      "dest": "/"
+    }
+  ],
+   "outputDirectory": "dist",
+   "buildCommand": "npm run build",
+   "env": {
+    "NODE_ENV": "production"
+  },
+   "cache": false,
+   "cleanUrls": true,
+   "trailingSlash": false,
+   "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
+      ]
+    }
+  ],
+   "functions": 
+
+  {
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist"
+  }
+
 }

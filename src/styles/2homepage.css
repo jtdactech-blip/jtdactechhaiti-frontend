@@ -1,0 +1,178 @@
+
+/* =====================================================
+   homepage.css
+===================================================== */
+
+.homepage {
+  min-height: 100vh;
+  background: #080404;
+  color: #111827;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255,255,255,0.95);
+  border-bottom: 1px solid #e5e7eb;
+  z-index: 999;
+}
+
+.nav-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1d4ed8;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #374151;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #2563eb;
+}
+
+.primary-btn {
+  background: #1d4ed8;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.primary-btn:hover {
+  background: #1e40af;
+}
+
+
+.page-container {
+  background: #f8fafc;
+}
+
+.hero-section {
+  padding: 140px 20px 100px;
+  text-align: center;
+}
+
+.dark-hero,
+.products-hero,
+.contact-hero,
+.payment-hero {
+  background: linear-gradient(135deg, #020617, #0f172a, #1e3a8a);
+  color: white;
+}
+
+.hero-title {
+  font-size: 52px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.hero-text {
+  max-width: 700px;
+  margin: auto;
+  color: #cbd5e1;
+  line-height: 1.7;
+  font-size: 18px;
+}
+
+.section-light {
+  padding: 100px 0;
+}
+
+.services-grid,
+.products-grid,
+.payments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.service-card,
+.product-card,
+.payment-card,
+.about-card {
+  background: white;
+  border-radius: 24px;
+  padding: 35px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.service-card:hover,
+.product-card:hover,
+.payment-card:hover {
+  transform: translateY(-8px);
+}
+
+.service-icon,
+.payment-icon,
+.product-image {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+.contact-grid,
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 40px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #d1d5db;
+  font-size: 16px;
+}
+
+.map-box {
+  margin-top: 25px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+
+  .logo {
+    font-size: 22px;
+  }
+}
+
