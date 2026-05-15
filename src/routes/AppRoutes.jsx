@@ -28,7 +28,7 @@ export default function AppRoutes() {
         <Route path="/login" element={<Login />} />
 
         <Route
-          path="/dashboard"
+          path="/admin/dashboard"
           element={
             <ProtectedRoute>
               <DashboardPage />
@@ -36,7 +36,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/subscription"
+          path="/admin/subscription"
           element={
             <AdminRoute>
               <SubscriptionPage />
@@ -44,7 +44,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/employees"
+          path="/admin/employees"
           element={
             <AdminRoute>
               <ManagementPage pageKey="employees" />
@@ -52,7 +52,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/clients"
+          path="/admin/clients"
           element={
             <AdminRoute>
               <ManagementPage pageKey="clients" />
@@ -60,7 +60,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/backoffice/products"
+          path="/admin/backoffice/products"
           element={
             <AdminRoute>
               <ManagementPage pageKey="products" />
@@ -68,7 +68,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/backoffice/services"
+          path="/admin/backoffice/services"
           element={
             <AdminRoute>
               <ManagementPage pageKey="services" />
@@ -76,7 +76,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/orders"
+          path="/admin/orders"
           element={
             <AdminRoute>
               <ManagementPage pageKey="orders" />
@@ -84,7 +84,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/proformas"
+          path="/admin/proformas"
           element={
             <AdminRoute>
               <ManagementPage pageKey="proformas" />
@@ -92,7 +92,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/invoices"
+          path="/admin/invoices"
           element={
             <AdminRoute>
               <ManagementPage pageKey="invoices" />
@@ -100,7 +100,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/finance"
+          path="/admin/finance"
           element={
             <AdminRoute>
               <ManagementPage pageKey="finance" />
@@ -108,7 +108,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/reports"
+          path="/admin/reports"
           element={
             <AdminRoute>
               <ManagementPage pageKey="reports" />
